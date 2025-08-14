@@ -196,6 +196,176 @@ numbers = [10, 25, 33, 50, 120, 155, 5, 200]
 display_divisible_by_5(numbers)
 
 
+# In[3]:
+
+
+# 13. Reverse the following list using for loop
+
+List1 = [10,20,30,40]
+
+reversed_list = []
+
+for i in range(len(List1) - 1, -1, -1):
+    reversed_list.append(List1[i])
+
+print(reversed_list)
+
+
+# In[4]:
+
+
+# 14. Write a Python program to display all the prime numbers within a range
+
+
+start = int(input("Enter the start of the range: "))
+end = int(input("Enter the end of the range: "))
+
+print(f"Prime numbers between {start} and {end} are:")
+
+for num in range(start, end + 1):
+    if num > 1:  # primes are greater than 1
+        for i in range(2, int(num ** 0.5) + 1):
+            if num % i == 0:
+                break
+        else:
+            print(num)
+
+
+# In[ ]:
+
+
+# 15. Write a Python program for a Car Show room that sells cars of different brans of different price.
+# Consider all features of a car and develop an OOP program that has following functionalities:
+
+
+import pandas as pd
+import numpy as np
+
+
+class Car:
+    def __init__(self, car_id, brand, model, year, price, color, fuel_type, transmission):
+        self.car_id = car_id
+        self.brand = brand
+        self.model = model
+        self.year = year
+        self.price = price
+        self.color = color
+        self.fuel_type = fuel_type
+        self.transmission = transmission
+
+    def get_details(self):
+        return {
+            "Car ID": self.car_id,
+            "Brand": self.brand,
+            "Model": self.model,
+            "Year": self.year,
+            "Price": self.price,
+            "Color": self.color,
+            "Fuel Type": self.fuel_type,
+            "Transmission": self.transmission
+        }
+
+
+class Showroom:
+    def __init__(self):
+        self.inventory = []
+
+    def add_car(self, car):
+        self.inventory.append(car)
+        print(f"{car.brand} {car.model} added to the showroom.")
+
+    def view_available_cars(self):
+        if not self.inventory:
+            print("No cars currently available.")
+            return
+
+        data = [car.get_details() for car in self.inventory]
+        df = pd.DataFrame(data)
+        print("\nAvailable Cars:")
+        print(df.to_string(index=False))
+
+    def display_car_details(self, car_id):
+        found = False
+        for car in self.inventory:
+            if car.car_id == car_id:
+                df = pd.DataFrame([car.get_details()])
+                print("\nCar Details:")
+                print(df.to_string(index=False))
+                found = True
+                break
+        if not found:
+            print(f"No car found with ID: {car_id}")
+
+    def sell_car(self, car_id):
+        try:
+            car = next(car for car in self.inventory if car.car_id == car_id)
+            self.inventory.remove(car)
+            print(f"Car {car.brand} {car.model} (ID: {car_id}) sold successfully.")
+        except StopIteration:
+            print(f"Error: Car with ID {car_id} not found. Cannot sell.")
+
+    def buy_car(self, brand, model, year, price, color, fuel_type, transmission):
+        try:
+            
+            car_id = "CAR" + str(np.random.randint(1000, 9999))
+            new_car = Car(car_id, brand, model, year, price, color, fuel_type, transmission)
+            self.add_car(new_car)
+        except Exception as e:
+            print(f"Error while buying car: {str(e)}")
+
+
+
+if __name__ == "__main__":
+    showroom = Showroom()
+
+    # Adding some cars initially
+    showroom.buy_car("Toyota", "Corolla", 2022, 20000, "White", "Petrol", "Automatic")
+    showroom.buy_car("Honda", "Civic", 2023, 25000, "Black", "Petrol", "Manual")
+    showroom.buy_car("Tesla", "Model 3", 2024, 45000, "Red", "Electric", "Automatic")
+
+    while True:
+        print("\n===== Car Showroom Menu =====")
+        print("1. View Available Cars")
+        print("2. Display Details of a Car")
+        print("3. Sell a Car")
+        print("4. Buy a Car")
+        print("5. Exit")
+        choice = input("Enter your choice (1-5): ")
+
+        if choice == "1":
+            showroom.view_available_cars()
+
+        elif choice == "2":
+            car_id = input("Enter Car ID to view details: ")
+            showroom.display_car_details(car_id)
+
+        elif choice == "3":
+            car_id = input("Enter Car ID to sell: ")
+            showroom.sell_car(car_id)
+
+        elif choice == "4":
+            print("Enter car details to add:")
+            brand = input("Brand: ")
+            model = input("Model: ")
+            try:
+                year = int(input("Year: "))
+                price = float(input("Price: "))
+            except ValueError:
+                print("Invalid year or price. Please enter numeric values.")
+                continue
+            color = input("Color: ")
+            fuel_type = input("Fuel Type: ")
+            transmission = input("Transmission: ")
+            showroom.buy_car(brand, model, year, price, color, fuel_type, transmission)
+
+        elif choice == "5":
+            print("Exiting showroom system.")
+            break
+
+        else:
+            print("Invalid choice. Please select a number from 1 to 5.")
+
+
 # In[ ]:
 
 
